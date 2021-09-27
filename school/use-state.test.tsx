@@ -24,7 +24,6 @@ describe('useState', ()=>{
       return (
         <div>
           <div data-testid="this-id">${greetings}</div>
-
           <button data-testid="change" onClick={ ()=> { setGreetings('hi'); }}>change</button>
         </div>
       )
