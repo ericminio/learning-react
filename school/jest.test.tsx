@@ -9,4 +9,15 @@ describe('Jest', ()=>{
 
     expect(screen.getByTestId('this-id')).toHaveTextContent('hello');
   });
+
+  it('welcomes components', ()=>{
+    function Hello() {
+      return (
+        <div data-testid="this-id">hello world</div>
+      )
+    }
+    render(<Hello />);
+
+    expect(screen.getByTestId('this-id')).toHaveTextContent('hello');
+  });
 });
