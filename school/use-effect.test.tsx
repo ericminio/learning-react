@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
 describe('useEffect', ()=>{
 
@@ -12,12 +13,12 @@ describe('useEffect', ()=>{
       })
 
       return (
-        <div data-testid="this-id">${greetings}</div>
+        <div role="greetings">${greetings}</div>
       )
     }
     render(<Hello />);
 
-    expect(screen.getByTestId('this-id')).toHaveTextContent('hello');
+    expect(screen.getByRole("greetings")).toHaveTextContent('hello');
   });
 
   it('can detect value change', ()=>{
@@ -30,16 +31,16 @@ describe('useEffect', ()=>{
       }, [greetings])
 
       return (
-        <div>
-          <div data-testid="this-id">${message}</div>
-          <button data-testid="change" onClick={ ()=> { setGreetings('hi'); }}>change</button>
-        </div>
+        <>
+          <div>${message}</div>
+          <button onClick={ ()=> { setGreetings('hi'); }}>change</button>
+        </>
       )
     }
     render(<Hello />);
-    expect(screen.getByTestId('this-id')).toHaveTextContent('hello world');
+    expect(screen.getByText(/hello world/)).toBeInTheDocument();
 
-    fireEvent(screen.getByTestId('change'), new MouseEvent('click', { bubbles: true }))
-    expect(screen.getByTestId('this-id')).toHaveTextContent('hi world');
+    userEvent.click(screen.getByText('change'));
+    expect(screen.getByText(/hi world/)).toBeInTheDocument();
   });
 });
