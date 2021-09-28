@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 describe('useEffect', ()=>{
 
   it('can set initial value', ()=>{
-    function Hello() {
+    let Hello = ()=> {
       const [greetings, setGreetings] = useState();
       useEffect(()=>{
         setGreetings('hello')
@@ -22,7 +22,7 @@ describe('useEffect', ()=>{
   });
 
   it('can detect value change', ()=>{
-    function Hello() {
+    let Hello = ()=> {
       const [greetings, setGreetings] = useState('hello');
       const [message, setMessage] = useState();
       
@@ -38,6 +38,30 @@ describe('useEffect', ()=>{
       )
     }
     render(<Hello />);
+    expect(screen.getByText(/hello world/)).toBeInTheDocument();
+
+    userEvent.click(screen.getByText('change'));
+    expect(screen.getByText(/hi world/)).toBeInTheDocument();
+  });
+
+  it('can use external function', ()=>{
+    let returningWhat = ()=> 'world';
+    let Hello = ({getData})=> {
+      const [greetings, setGreetings] = useState('hello');
+      const [message, setMessage] = useState();
+
+      useEffect(()=>{
+        setMessage(`${greetings} ${getData()}`)
+      })
+      
+      return (
+        <>
+          <div>${message}</div>
+          <button onClick={ ()=> { setGreetings('hi'); }}>change</button>
+        </>
+      )
+    }
+    render(<Hello getData={returningWhat}/>)
     expect(screen.getByText(/hello world/)).toBeInTheDocument();
 
     userEvent.click(screen.getByText('change'));
