@@ -93,16 +93,13 @@ describe('useEffect', ()=>{
 
   it('helps encapsulate promise in async state', async ()=>{
     let useStateAsync = () => {
-      const [message, setMessage] = useState();
+      const [message, setMessage] = useState('hi');
 
       useEffect(()=> {
         let mounted = true;
         Promise.resolve('hello world')
           .then((value) => {
             if (mounted) setMessage(value);
-          })
-          .catch(() => {
-            if (mounted) setMessage('error')
           })
 
         return () => { mounted = true; }
@@ -121,6 +118,7 @@ describe('useEffect', ()=>{
       )
     }
     render(<Hello />);
+    expect(screen.getByText(/hi/)).toBeInTheDocument();
 
     await waitFor(() => screen.getByText(/hello world/));
   });
