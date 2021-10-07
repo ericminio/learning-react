@@ -90,4 +90,38 @@ describe('useEffect', ()=>{
 
     await waitFor(() => screen.getByText(/hello world/));
   });
+
+  it('helps encapsulate promise in async state', async ()=>{
+    let useStateAsync = () => {
+      const [message, setMessage] = useState();
+
+      useEffect(()=> {
+        let mounted = true;
+        Promise.resolve('hello world')
+          .then((value) => {
+            if (mounted) setMessage(value);
+          })
+          .catch(() => {
+            if (mounted) setMessage('error')
+          })
+
+        return () => { mounted = true; }
+      })
+
+      return message;
+    }
+
+    let Hello = ()=> {
+      const message = useStateAsync();
+
+      return (
+        <>
+          <div>${message}</div>
+        </>
+      )
+    }
+    render(<Hello />);
+
+    await waitFor(() => screen.getByText(/hello world/));
+  });
 });
