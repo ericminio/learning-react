@@ -102,7 +102,7 @@ describe('useEffect', ()=>{
             if (mounted) setMessage(value);
           })
 
-        return () => { mounted = true; }
+        return () => { mounted = false; }
       })
 
       return message;
