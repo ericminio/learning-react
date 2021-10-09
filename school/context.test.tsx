@@ -11,16 +11,20 @@ describe('Context', ()=>{
       const message = useContext(CustomContext);
       return <div>${message}</div>
     }
-    function CustomContextProvider() {
+    function CustomContextProvider({children}: React.PropsWithChildren) {
       return (
         <>
-          <CustomContext.Provider value="hello">
-            <Message />
+          <CustomContext.Provider value="hello">      
+            {children}      
           </CustomContext.Provider>
         </>
       )
     }
-    render(<CustomContextProvider><Message /></CustomContextProvider>);
+    render(
+      <CustomContextProvider>
+        <Message/>
+      </CustomContextProvider>
+    );
 
     expect(screen.getByText(/hello/)).toBeInTheDocument();
   });
