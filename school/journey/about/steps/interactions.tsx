@@ -1,23 +1,16 @@
 import React from 'react';
-import { MemoryRouter, Switch, Route } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { One, Two } from './sut';
+import { Sut } from './sut';
 
 export function givenWeOpenThePage(pathname) {
     render(
         <MemoryRouter initialEntries={[ pathname ]}>
-            <Switch>
-                <Route path="/one">
-                    <One then="/two"/>
-                </Route>
-                <Route path="/two">
-                    <Two />
-                </Route>
-            </Switch>
+            <Sut />
         </MemoryRouter>
     );
 }
