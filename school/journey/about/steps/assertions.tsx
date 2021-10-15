@@ -1,8 +1,5 @@
 import { screen } from '@testing-library/react';
 
-export function thenWeSeeTheFirstPage() {
-    expect(screen.getByRole('button', { name:'go' })).toBeInTheDocument();
-}
-export function thenWeSeeTheSecondPage() {
+export function andTheWorldWasChangedForever() {
     expect(screen.getByText(/landed/)).toBeInTheDocument();
 }

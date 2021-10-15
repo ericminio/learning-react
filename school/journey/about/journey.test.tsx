@@ -1,29 +1,15 @@
 import { 
-    givenWeOpenThePage,
-    givenWeOpenTheFirstPage,
-    whenWeContinueToNextPage,
-    thenWeSeeTheFirstPage,
-    thenWeSeeTheSecondPage,
+    onceUponATime,
+    somethingCrazyHappened,
+    andTheWorldWasChangedForever,
 } from './steps'
 
 describe('journey', ()=>{
 
-    it('has a start', ()=>{
-        givenWeOpenThePage("/one");
-
-        thenWeSeeTheFirstPage();  
-    });
-    
     it('can be told as a story', ()=>{
-        givenWeOpenTheFirstPage();
-        whenWeContinueToNextPage();
+        onceUponATime();
+        somethingCrazyHappened();
 
-        thenWeSeeTheSecondPage();  
-    });
-
-    it('can have shortcut', ()=>{
-        givenWeOpenThePage("/two");
-
-        thenWeSeeTheSecondPage();  
+        andTheWorldWasChangedForever();  
     });
 });
