@@ -21,6 +21,9 @@ export function givenWeOpenThePage(pathname) {
         </MemoryRouter>
     );
 }
+export function givenWeOpenTheFirstPage() {
+    givenWeOpenThePage("/one");
+}
 export function whenWeContinueToNextPage() {
     userEvent.click(screen.getByRole('button', { name:'go' }));
 }

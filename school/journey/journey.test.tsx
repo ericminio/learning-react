@@ -1,5 +1,6 @@
 import { 
     givenWeOpenThePage,
+    givenWeOpenTheFirstPage,
     whenWeContinueToNextPage,
     thenWeSeeTheFirstPage,
     thenWeSeeTheSecondPage,
@@ -14,7 +15,7 @@ describe('journey', ()=>{
     });
     
     it('can be told as a story', ()=>{
-        givenWeOpenThePage("/one");
+        givenWeOpenTheFirstPage();
         whenWeContinueToNextPage();
 
         thenWeSeeTheSecondPage();  
