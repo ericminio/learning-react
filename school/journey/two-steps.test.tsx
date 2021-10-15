@@ -1,12 +1,3 @@
-import React, { useState } from 'react';
-import { MemoryRouter, Switch, Route, Redirect } from "react-router-dom";
-import '@testing-library/jest-dom';
-import { render, screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event';
-
-import { One } from './one';
-import { Two } from './two';
-
 import { 
     givenWeOpenTheFirstStep, 
     whenWeContinueToNextStep,

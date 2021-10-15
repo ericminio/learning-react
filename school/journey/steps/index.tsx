@@ -4,8 +4,8 @@ import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event';
 
-import { One } from './one';
-import { Two } from './two';
+import { One } from '../sut/one';
+import { Two } from '../sut/two';
 
 export function givenWeOpenTheFirstStep() {
     render(
