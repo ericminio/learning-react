@@ -1,15 +1,11 @@
-import { 
-    onceUponATime,
-    somethingCrazyHappened,
-    andTheWorldWasChangedForever,
-} from './steps'
+import { once, when, then } from './steps'
 
 describe('journey', ()=>{
 
     it('can be told as a story', ()=>{
-        onceUponATime();
-        somethingCrazyHappened();
+        once.uponATime();
+        when.somethingCrazyHappened();
 
-        andTheWorldWasChangedForever();  
+        then.theWorldWasChangedForever();  
     });
 });

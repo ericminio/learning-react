@@ -1,5 +1,5 @@
 import { screen } from '@testing-library/react';
 
-export function andTheWorldWasChangedForever() {
+export function theWorldWasChangedForever() {
     expect(screen.getByText(/landed/)).toBeInTheDocument();
 }

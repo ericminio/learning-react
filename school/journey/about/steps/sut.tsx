@@ -19,7 +19,7 @@ function Sut() {
     )
 }
 
-export function onceUponATime() {
+export function uponATime() {
     render(
         <MemoryRouter initialEntries={[ "/one" ]}>
             <Sut />
