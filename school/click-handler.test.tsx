@@ -52,8 +52,8 @@ describe('click handler', ()=>{
 
   it('can access async attribute', async ()=>{
     let getDataAsync = () => {
-      type MaybeLoading = { state:'loading' } | { state:'loaded', value:string }
-      const [data, setData] = useState<MaybeLoading>({ state:'loading' })
+      type MaybeLoading = { loading:true } | { loading:false, value:string }
+      const [data, setData] = useState<MaybeLoading>({ loading:true })
 
       setTimeout(() => {
         setData({ loading:false, value:'hello world' });
@@ -69,12 +69,8 @@ describe('click handler', ()=>{
         setMessage(`clicked - ${data.value}`);
       }, [setMessage, data]);
       
-      if (data.state == 'loading') {
-        return (
-          <>
-            <div>loading...</div>
-          </>
-        )
+      if (data.loading) {
+        return (<div>loading...</div>)
       }
 
       const { value } = data;
