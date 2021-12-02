@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -52,29 +52,24 @@ describe('click handler', ()=>{
 
   it('can access async attribute', async ()=>{
     let getDataAsync = () => {
-      const [message, setMessage] = useState('loading');
+      type MaybeLoading = { state:'loading' } | { state:'loaded', value:string }
+      const [data, setData] = useState<MaybeLoading>({ state:'loading' })
 
-      useEffect(()=> {
-        let mounted = true;
-        Promise.resolve('hello world')
-          .then((value) => {
-            if (mounted) setMessage(value);
-          })
+      setTimeout(() => {
+        setData({ loading:false, value:'hello world' });
+      }, 1);
 
-        return () => { mounted = false; }
-      })
-
-      return message;
+      return data;
     }
-    let Hello = ()=> {
+    let Sut = ()=> {
       const [message, setMessage] = useState('hello');
-      const value = getDataAsync();
-      
-      const handler = useEffect(() => {
-        setMessage(`clicked - ${value}`);
-      }, [setMessage, value]);
+      const data = getDataAsync();
 
-      if (value == 'loading') {
+      const handler = useCallback(() => {
+        setMessage(`clicked - ${data.value}`);
+      }, [setMessage, data]);
+      
+      if (data.state == 'loading') {
         return (
           <>
             <div>loading...</div>
@@ -82,23 +77,25 @@ describe('click handler', ()=>{
         )
       }
 
+      const { value } = data;
+      
       return (
         <>
+          <label>received - {value}</label>
           <label>{message}</label>
           <button onClick={handler}>go</button>
         </>
       )
     }
-    render(<Hello />);
-    expect(screen.getByText(/loading/)).toBeInTheDocument();
+    render(<Sut />);
+    expect(screen.queryByText(/loading/)).toBeInTheDocument();
 
     await waitFor(() => {
+      expect(screen.getByText(/received - hello world/)).toBeInTheDocument();
+      expect(screen.getByRole('button', { name:'go' })).toBeInTheDocument();
       userEvent.click(screen.getByRole('button', { name:'go' }));
     });
     expect(screen.getByText(/clicked - hello world/)).toBeInTheDocument();
   });
 });
 
-function useCallback(arg0: () => void, arg1: undefined[]) {
-  throw new Error('Function not implemented.');
-}
