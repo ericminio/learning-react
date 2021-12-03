@@ -50,48 +50,51 @@ describe('click handler', ()=>{
     expect(screen.getByText(/clicked - 42/)).toBeInTheDocument();
   });
 
-  it('can access async attribute', async ()=>{
+  it('can useEffect to access async data in callback', async ()=>{
     let getDataAsync = () => {
       type MaybeLoading = { loading:true } | { loading:false, value:string }
       const [data, setData] = useState<MaybeLoading>({ loading:true })
 
       setTimeout(() => {
-        setData({ loading:false, value:'hello world' });
-      }, 1);
+        setData({ loading:false, value:42 });
+      }, 100);
 
       return data;
     }
-    let Sut = ()=> {
-      const [message, setMessage] = useState('hello');
-      const data = getDataAsync();
 
-      const handler = useCallback(() => {
-        setMessage(`clicked - ${data.value}`);
-      }, [setMessage, data]);
+    let Sut = ()=> {
+      const [message, setMessage] = useState('hello world');
+      const data = getDataAsync();
+      const [value, setValue] = useState()
+
+      const go = () => {
+        setMessage(`received: ${value}`);
+      };
+
+      useEffect(() => {
+        setValue(data.value);        
+      }, [data.value]);
       
       if (data.loading) {
         return (<div>loading...</div>)
       }
-
-      const { value } = data;
       
       return (
         <>
-          <label>received - {value}</label>
           <label>{message}</label>
-          <button onClick={handler}>go</button>
+          <button onClick={go}>go</button>
         </>
       )
     }
     render(<Sut />);
     expect(screen.queryByText(/loading/)).toBeInTheDocument();
-
     await waitFor(() => {
-      expect(screen.getByText(/received - hello world/)).toBeInTheDocument();
-      expect(screen.getByRole('button', { name:'go' })).toBeInTheDocument();
-      userEvent.click(screen.getByRole('button', { name:'go' }));
+      expect(screen.getByText(/hello world/)).toBeInTheDocument();      
     });
-    expect(screen.getByText(/clicked - hello world/)).toBeInTheDocument();
+    userEvent.click(screen.getByRole('button', { name:'go' }));
+    await waitFor(() => {
+      expect(screen.getByText(/received: 42/)).toBeInTheDocument();
+    });
   });
 });
 
