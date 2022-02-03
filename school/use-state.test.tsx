@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 
 describe('useState', ()=>{
 
@@ -33,4 +33,58 @@ describe('useState', ()=>{
 
     expect(screen.getByTestId('this-id')).toHaveTextContent('hi');
   });
+
+  it('needs a mounted component', async ()=>{
+    let errorMessage = '';
+    jest.spyOn(console, 'error').mockImplementationOnce((message) => { errorMessage = message; });
+    let App = ()=> {
+        const [showOne, setShowOne] = useState(true);
+        const [showTwo, setShowTwo] = useState(false);
+
+        useEffect(() => {
+          setTimeout(() => {
+            setShowOne(false);
+            setShowTwo(true);
+          }, 1);
+        })
+        return (
+            <>
+              { showOne && <One />}
+              { showTwo && <Two />}
+            </>
+        )
+    }
+    let One = ()=> {
+      const [data, setData] = useState('welcome');
+
+      useEffect(()=> {
+        setTimeout(()=> {
+          setData('hello world')
+        }, 150)
+      })
+      return (
+        <div>${data}</div>
+      )
+    }
+    let Two = ()=> {
+      const [message, setMessage] = useState('loading');
+      useEffect(()=> {
+        setTimeout(()=> {
+          setMessage('two')
+        }, 300)
+      })
+      return (
+        <div>${message}</div>
+      )
+    }
+    render(
+        <App />
+    );
+    await waitFor(() => {
+        expect(screen.getByText(/two/)).toBeInTheDocument();
+
+        expect(errorMessage).toContain('Can\'t perform a React state update on an unmounted component')
+    });    
+  });
 });
+
