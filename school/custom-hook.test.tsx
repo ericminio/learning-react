@@ -21,5 +21,29 @@ describe('custom hook', ()=>{
 
     expect(screen.getByTestId('this-id')).toHaveTextContent('hello');
   });
+
+  it('can be async', async ()=> {
+    function useThat() {
+      const [greetings, setGreetings] = useState('hello');
+
+      setTimeout(()=> {
+        setGreetings('hello world');
+      }, 15);
+
+      return greetings;
+    }
+    function Hello() {
+      const greetings = useThat();
+
+      return (
+        <div data-testid="this-id">${greetings}</div>
+      )
+    }
+    render(<Hello />);
+
+    await waitFor(()=> {
+      expect(screen.getByTestId('this-id')).toHaveTextContent('hello world');
+    });
+  });
 });
 
