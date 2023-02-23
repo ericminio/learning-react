@@ -2,7 +2,7 @@ import * as React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 
-describe.only('Jest', () => {
+describe('Jest', () => {
     it('is ready', () => {
         render(<div data-testid="this-id">hello world</div>);
 
