@@ -1,5 +1,5 @@
 import React from 'react';
-import { MemoryRouter, Switch, Route } from "react-router-dom";
+import { MemoryRouter, Switch, Route } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
 
@@ -10,18 +10,18 @@ function Sut() {
     return (
         <Switch>
             <Route path="/one">
-                <One then="/two"/>
+                <One then="/two" />
             </Route>
             <Route path="/two">
                 <Two />
             </Route>
         </Switch>
-    )
+    );
 }
 
-export function uponATime() {
+export function uponATime() {
     render(
-        <MemoryRouter initialEntries={[ "/one" ]}>
+        <MemoryRouter initialEntries={['/one']}>
             <Sut />
         </MemoryRouter>
     );

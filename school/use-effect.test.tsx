@@ -3,123 +3,133 @@ import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-describe('useEffect', ()=>{
+describe('useEffect', () => {
+    it('can set initial value', () => {
+        let Hello = () => {
+            const [greetings, setGreetings] = useState();
+            useEffect(() => {
+                setGreetings('hello');
+            });
 
-  it('can set initial value', ()=>{
-    let Hello = ()=> {
-      const [greetings, setGreetings] = useState();
-      useEffect(()=>{
-        setGreetings('hello')
-      })
+            return <div role="greetings">${greetings}</div>;
+        };
+        render(<Hello />);
 
-      return (
-        <div role="greetings">${greetings}</div>
-      )
-    }
-    render(<Hello />);
+        expect(screen.getByRole('greetings')).toHaveTextContent('hello');
+    });
 
-    expect(screen.getByRole("greetings")).toHaveTextContent('hello');
-  });
+    it('can detect value change', () => {
+        let Hello = () => {
+            const [greetings, setGreetings] = useState('hello');
+            const [message, setMessage] = useState();
 
-  it('can detect value change', ()=>{
-    let Hello = ()=> {
-      const [greetings, setGreetings] = useState('hello');
-      const [message, setMessage] = useState();
-      
-      useEffect(()=>{
-        setMessage(`${greetings} world`)
-      }, [greetings])
+            useEffect(() => {
+                setMessage(`${greetings} world`);
+            }, [greetings]);
 
-      return (
-        <>
-          <div>${message}</div>
-          <button onClick={ ()=> { setGreetings('hi'); }}>change</button>
-        </>
-      )
-    }
-    render(<Hello />);
-    expect(screen.getByText(/hello world/)).toBeInTheDocument();
+            return (
+                <>
+                    <div>${message}</div>
+                    <button
+                        onClick={() => {
+                            setGreetings('hi');
+                        }}
+                    >
+                        change
+                    </button>
+                </>
+            );
+        };
+        render(<Hello />);
+        expect(screen.getByText(/hello world/)).toBeInTheDocument();
 
-    userEvent.click(screen.getByText('change'));
-    expect(screen.getByText(/hi world/)).toBeInTheDocument();
-  });
+        userEvent.click(screen.getByText('change'));
+        expect(screen.getByText(/hi world/)).toBeInTheDocument();
+    });
 
-  it('can use external function', ()=>{
-    let returningWhat = ()=> 'world';
-    let Hello = ({getData})=> {
-      const [greetings, setGreetings] = useState('hello');
-      const [message, setMessage] = useState();
+    it('can use external function', () => {
+        let returningWhat = () => 'world';
+        let Hello = ({ getData }) => {
+            const [greetings, setGreetings] = useState('hello');
+            const [message, setMessage] = useState();
 
-      useEffect(()=>{
-        setMessage(`${greetings} ${getData()}`)
-      })
-      
-      return (
-        <>
-          <div>${message}</div>
-          <button onClick={ ()=> { setGreetings('hi'); }}>change</button>
-        </>
-      )
-    }
-    render(<Hello getData={returningWhat}/>)
-    expect(screen.getByText(/hello world/)).toBeInTheDocument();
+            useEffect(() => {
+                setMessage(`${greetings} ${getData()}`);
+            });
 
-    userEvent.click(screen.getByText('change'));
-    expect(screen.getByText(/hi world/)).toBeInTheDocument();
-  });
+            return (
+                <>
+                    <div>${message}</div>
+                    <button
+                        onClick={() => {
+                            setGreetings('hi');
+                        }}
+                    >
+                        change
+                    </button>
+                </>
+            );
+        };
+        render(<Hello getData={returningWhat} />);
+        expect(screen.getByText(/hello world/)).toBeInTheDocument();
 
-  it('resists promise', async ()=>{
-    let returningWhat = ()=> Promise.resolve('hello world');
+        userEvent.click(screen.getByText('change'));
+        expect(screen.getByText(/hi world/)).toBeInTheDocument();
+    });
 
-    let Hello = ({getData})=> {
-      const [message, setMessage] = useState();
+    it('resists promise', async () => {
+        let returningWhat = () => Promise.resolve('hello world');
 
-      useEffect(()=>{
-        getData()
-          .then(value => setMessage(value))
-          .catch(error => setMessage(null, error.message));
-      })
-      
-      return (
-        <>
-          <div>${message}</div>
-        </>
-      )
-    }
-    render(<Hello getData={returningWhat}/>);
+        let Hello = ({ getData }) => {
+            const [message, setMessage] = useState();
 
-    await waitFor(() => screen.getByText(/hello world/));
-  });
+            useEffect(() => {
+                getData()
+                    .then((value) => setMessage(value))
+                    .catch((error) => setMessage(null, error.message));
+            });
 
-  it('helps encapsulate promise in async state', async ()=>{
-    let useStateAsync = () => {
-      const [message, setMessage] = useState('hi');
+            return (
+                <>
+                    <div>${message}</div>
+                </>
+            );
+        };
+        render(<Hello getData={returningWhat} />);
 
-      useEffect(()=> {
-        let mounted = true;
-        Promise.resolve('hello world')
-          .then((value) => {
-            if (mounted) setMessage(value);
-          })
+        await waitFor(() => screen.getByText(/hello world/));
+    });
 
-        return () => { mounted = false; }
-      })
+    it('helps encapsulate promise in async state', async () => {
+        let useStateAsync = () => {
+            const [message, setMessage] = useState('hi');
 
-      return message;
-    }
+            useEffect(() => {
+                let mounted = true;
+                Promise.resolve('hello world').then((value) => {
+                    if (mounted) setMessage(value);
+                });
 
-    let Hello = ()=> {
-      const message = useStateAsync();
+                return () => {
+                    mounted = false;
+                };
+            });
 
-      return (
-        <>
-          <div>${message}</div>
-        </>
-      )
-    }
-    render(<Hello />);
-    expect(screen.getByText(/hi/)).toBeInTheDocument();
+            return message;
+        };
 
-    await waitFor(() => screen.getByText(/hello world/));
-  });
+        let Hello = () => {
+            const message = useStateAsync();
+
+            return (
+                <>
+                    <div>${message}</div>
+                </>
+            );
+        };
+        render(<Hello />);
+        expect(screen.getByText(/hi/)).toBeInTheDocument();
+
+        await waitFor(() => screen.getByText(/hello world/));
+    });
 });
