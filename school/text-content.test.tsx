@@ -17,8 +17,8 @@ const getTextContent = (node) => {
     }
 };
 
-describe('textContent util', () => {
-    it('is not native', () => {
+describe('getTextContent', () => {
+    it('works with nested function component', () => {
         const Hello = (): JSX.Element => {
             return <div>hello world</div>;
         };
