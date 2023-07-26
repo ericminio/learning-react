@@ -4,13 +4,13 @@ import { render, screen, waitFor } from '@testing-library/react';
 
 describe('Context', () => {
     it('can provide value to child component', () => {
-        const CustomContext = React.createContext();
+        const CustomContext = React.createContext('');
 
         function Message() {
             const message = useContext(CustomContext);
             return <div>${message}</div>;
         }
-        function CustomContextProvider({ children }: React.PropsWithChildren) {
+        function CustomContextProvider({ children }: React.PropsWithChildren<unknown>) {
             return (
                 <>
                     <CustomContext.Provider value="hello">
@@ -28,8 +28,8 @@ describe('Context', () => {
         expect(screen.getByText(/hello/)).toBeInTheDocument();
     });
     it('can be nested', () => {
-        const CustomContextOne = React.createContext();
-        const CustomContextTwo = React.createContext();
+        const CustomContextOne = React.createContext('');
+        const CustomContextTwo = React.createContext('');
 
         function Message() {
             const one = useContext(CustomContextOne);
@@ -43,7 +43,7 @@ describe('Context', () => {
         }
         function CustomContextOneProvider({
             children,
-        }: React.PropsWithChildren) {
+        }: React.PropsWithChildren<unknown>) {
             return (
                 <>
                     <CustomContextOne.Provider value="hello">
@@ -54,7 +54,7 @@ describe('Context', () => {
         }
         function CustomContextTwoProvider({
             children,
-        }: React.PropsWithChildren) {
+        }: React.PropsWithChildren<unknown>) {
             return (
                 <>
                     <CustomContextTwo.Provider value="world">
