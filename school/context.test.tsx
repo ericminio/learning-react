@@ -10,7 +10,9 @@ describe('Context', () => {
             const message = useContext(CustomContext);
             return <div>${message}</div>;
         }
-        function CustomContextProvider({ children }: React.PropsWithChildren<unknown>) {
+        function CustomContextProvider({
+            children,
+        }: React.PropsWithChildren<unknown>) {
             return (
                 <>
                     <CustomContext.Provider value="hello">
@@ -74,16 +76,16 @@ describe('Context', () => {
         expect(screen.getByText(/hello/)).toBeInTheDocument();
         expect(screen.getByText(/world/)).toBeInTheDocument();
     });
-    it('can be the common store between components', async () => {    
-        const MessageContext = React.createContext({ message: '', setMessage: (_value) => { } });
+    it('can be the common store between components', async () => {
+        const MessageContext = React.createContext({
+            message: '',
+            setMessage: (_value) => {},
+        });
         const useMessageValue = () => {
             const [message, setMessage] = useState<string>('');
-            const value = useMemo(
-                () => ({ message, setMessage }),
-                [message]
-            );
+            const value = useMemo(() => ({ message, setMessage }), [message]);
             return { value };
-        }
+        };
         function App() {
             const { value } = useMessageValue();
 
@@ -92,14 +94,14 @@ describe('Context', () => {
                     <Source />
                     <Target />
                 </MessageContext.Provider>
-            )
+            );
         }
-        
+
         function Source() {
             const { setMessage } = useContext(MessageContext);
             useEffect(() => {
                 setMessage('world');
-            }, [])
+            }, []);
             return <div>will update</div>;
         }
         function Target() {
@@ -107,7 +109,7 @@ describe('Context', () => {
 
             return <div>hello {message}</div>;
         }
-        
+
         render(<App />);
 
         await waitFor(() => {
