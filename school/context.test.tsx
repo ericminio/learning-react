@@ -75,13 +75,17 @@ describe('Context', () => {
         expect(screen.getByText(/world/)).toBeInTheDocument();
     });
     it('can be the common store between components', async () => {    
-        const MessageContext = React.createContext({message:'', setMessage:(_value)=>{}});
-        function App() {
+        const MessageContext = React.createContext({ message: '', setMessage: (_value) => { } });
+        const useMessageValue = () => {
             const [message, setMessage] = useState<string>('');
             const value = useMemo(
                 () => ({ message, setMessage }),
                 [message]
             );
+            return { value };
+        }
+        function App() {
+            const { value } = useMessageValue();
 
             return (
                 <MessageContext.Provider value={value}>
