@@ -1,6 +1,7 @@
 import * as React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import { when } from 'jest-when';
 
 describe('Jest', () => {
     it('is ready', () => {
@@ -34,5 +35,22 @@ describe('Jest', () => {
         expect(screen.getByTestId('this-wrapper')).toHaveTextContent(
             'wrapping hello world'
         );
+    });
+
+    it('offers stubbing', () => {
+        const sut = jest.fn();
+
+        when(sut).mockReturnValue(42);
+
+        expect(sut()).toBe(42);
+    });
+
+    it('selects the most constrainted stub', () => {
+        const sut = jest.fn();
+
+        when(sut).calledWith(1, 2).mockReturnValue(3);
+        when(sut).mockReturnValue(42);
+
+        expect(sut(1, 2)).toBe(3);
     });
 });
