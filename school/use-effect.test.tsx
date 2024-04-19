@@ -6,7 +6,7 @@ import userEvent from '@testing-library/user-event';
 describe('useEffect', () => {
     it('can set initial value', () => {
         let Hello = () => {
-            const [greetings, setGreetings] = useState();
+            const [greetings, setGreetings] = useState<string>();
             useEffect(() => {
                 setGreetings('hello');
             });
@@ -20,8 +20,8 @@ describe('useEffect', () => {
 
     it('can detect value change', () => {
         let Hello = () => {
-            const [greetings, setGreetings] = useState('hello');
-            const [message, setMessage] = useState();
+            const [greetings, setGreetings] = useState<string>('hello');
+            const [message, setMessage] = useState<string>();
 
             useEffect(() => {
                 setMessage(`${greetings} world`);
@@ -50,8 +50,8 @@ describe('useEffect', () => {
     it('can use external function', () => {
         let returningWhat = () => 'world';
         let Hello = ({ getData }) => {
-            const [greetings, setGreetings] = useState('hello');
-            const [message, setMessage] = useState();
+            const [greetings, setGreetings] = useState<string>('hello');
+            const [message, setMessage] = useState<string>();
 
             useEffect(() => {
                 setMessage(`${greetings} ${getData()}`);
@@ -81,12 +81,12 @@ describe('useEffect', () => {
         let returningWhat = () => Promise.resolve('hello world');
 
         let Hello = ({ getData }) => {
-            const [message, setMessage] = useState();
+            const [message, setMessage] = useState<string>();
 
             useEffect(() => {
                 getData()
                     .then((value) => setMessage(value))
-                    .catch((error) => setMessage(null, error.message));
+                    .catch((error) => setMessage(error.message));
             });
 
             return (
@@ -131,5 +131,19 @@ describe('useEffect', () => {
         expect(screen.getByText(/hi/)).toBeInTheDocument();
 
         await waitFor(() => screen.getByText(/hello world/));
+    });
+
+    it('postpones render yield', () => {
+        let Hello = () => {
+            const [greetings, setGreetings] = useState<string>('hi');
+            useEffect(() => {
+                setGreetings('hello');
+            });
+
+            return <div role="greetings">${greetings}</div>;
+        };
+        render(<Hello />);
+
+        expect(screen.getByRole('greetings')).toHaveTextContent('hello');
     });
 });
