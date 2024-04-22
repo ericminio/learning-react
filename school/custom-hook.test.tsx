@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import '@testing-library/jest-dom';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
 
 describe('custom hook', () => {
     it('must have a name starting with use', () => {
@@ -41,5 +42,20 @@ describe('custom hook', () => {
                 'hello world'
             );
         });
+    });
+
+    it('can disclose intermediary steps', () => {
+        function useThat() {
+            const [greetings, setGreetings] = useState('hello');
+
+            useEffect(() => {
+                setGreetings('hi');
+            }, []);
+
+            return greetings;
+        }
+        const { result } = renderHook(() => useThat());
+
+        expect(result.all).toStrictEqual(['hello', 'hi']);
     });
 });

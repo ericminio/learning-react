@@ -133,17 +133,17 @@ describe('useEffect', () => {
         await waitFor(() => screen.getByText(/hello world/));
     });
 
-    it('postpones render yield', () => {
+    it('postpones rendering yield', () => {
         let Hello = () => {
             const [greetings, setGreetings] = useState<string>('hi');
             useEffect(() => {
                 setGreetings('hello');
-            });
+            }, []);
 
             return <div role="greetings">${greetings}</div>;
         };
-        render(<Hello />);
+        const { getByRole } = render(<Hello />);
 
-        expect(screen.getByRole('greetings')).toHaveTextContent('hello');
+        expect(getByRole('greetings')).toHaveTextContent('hello');
     });
 });
