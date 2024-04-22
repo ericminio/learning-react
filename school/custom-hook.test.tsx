@@ -54,7 +54,7 @@ describe('custom hook', () => {
 
             return greetings;
         }
-        const { result } = renderHook(() => useThat());
+        const { result } = renderHook(useThat);
 
         expect(result.all).toStrictEqual(['hello', 'hi']);
     });
