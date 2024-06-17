@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 export function One({ then }) {
     const [next, setNext] = useState(false);
 
     return (
         <>
-            {next && <Redirect to={then} />}
+            {next && <Navigate to={then} />}
             <button
                 onClick={() => {
                     setNext(true);

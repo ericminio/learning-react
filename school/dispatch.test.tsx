@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 describe('dispatch', () => {
-    it('can be shared to simulate eda', () => {
+    it('can be shared to simulate eda', async () => {
         const CustomContext = React.createContext(undefined);
         function CustomContextProvider({ children }) {
             const initial = { message: 'hello world' };
@@ -51,13 +51,17 @@ describe('dispatch', () => {
         }
         render(
             <>
-                <CustomContextProvider>
-                    <Source />
-                    <Target />
-                </CustomContextProvider>
+                <CustomContextProvider
+                    children={
+                        <>
+                            <Source />
+                            <Target />
+                        </>
+                    }
+                ></CustomContextProvider>
             </>
         );
-        userEvent.click(screen.getByText('change'));
+        await userEvent.click(screen.getByText('change'));
 
         expect(screen.getByText(/hi world/)).toBeInTheDocument();
     });
@@ -103,11 +107,13 @@ describe('dispatch', () => {
         }
         render(
             <>
-                <CustomContextProvider>
-                    <Source>
-                        <Target />
-                    </Source>
-                </CustomContextProvider>
+                <CustomContextProvider
+                    children={
+                        <Source>
+                            <Target />
+                        </Source>
+                    }
+                ></CustomContextProvider>
             </>
         );
 

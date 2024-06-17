@@ -1,18 +1,16 @@
 import * as React from 'react';
-import { MemoryRouter, Switch, Route } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 
 describe('Router', () => {
-    it('needs exact attribute on / to not be always selected', () => {
+    it('selects the first matching route', () => {
         render(
             <MemoryRouter initialEntries={['/page']}>
-                <Route exact path="/">
-                    <div>home</div>
-                </Route>
-                <Route path="/page">
-                    <div>page</div>
-                </Route>
+                <Routes>
+                    <Route path="/" element={<div>home</div>}></Route>
+                    <Route path="/page" element={<div>page</div>}></Route>
+                </Routes>
             </MemoryRouter>
         );
 
@@ -20,33 +18,13 @@ describe('Router', () => {
         expect(screen.queryByText(/home/)).not.toBeInTheDocument();
     });
 
-    it('will select both paths otherwise', () => {
+    it('explore', () => {
         render(
-            <MemoryRouter initialEntries={['/page']}>
-                <Route path="/">
-                    <div>home</div>
-                </Route>
-                <Route path="/page">
-                    <div>page</div>
-                </Route>
-            </MemoryRouter>
-        );
-
-        expect(screen.getByText(/page/)).toBeInTheDocument();
-        expect(screen.queryByText(/home/)).toBeInTheDocument();
-    });
-
-    it('will select the first matching with Switch', () => {
-        render(
-            <MemoryRouter initialEntries={['/page']}>
-                <Switch>
-                    <Route path="/">
-                        <div>home</div>
-                    </Route>
-                    <Route path="/page">
-                        <div>page</div>
-                    </Route>
-                </Switch>
+            <MemoryRouter initialEntries={['/']}>
+                <Routes>
+                    <Route path="/" element={<div>home</div>}></Route>
+                    <Route path="/page" element={<div>page</div>}></Route>
+                </Routes>
             </MemoryRouter>
         );
 

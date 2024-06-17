@@ -1,9 +1,9 @@
 import { once, when, then } from './steps';
 
 describe('journey', () => {
-    it('can be told as a story', () => {
+    it('can be told as a story', async () => {
         once.uponATime();
-        when.somethingCrazyHappened();
+        await when.somethingCrazyHappened();
 
         then.theWorldWasChangedForever();
     });

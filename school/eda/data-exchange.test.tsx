@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { Bus } from './event-bus';
 
 describe('Data exchange between components', () => {
-    it('can be achieved via pub/sub mechanism', () => {
+    it('can be achieved via pub/sub mechanism', async () => {
         let bus = new Bus();
         function Source({ bus }) {
             const sendHello = () => {
@@ -35,7 +35,7 @@ describe('Data exchange between components', () => {
                 <CapitalizeTarget bus={bus} />
             </>
         );
-        userEvent.click(screen.getByText('send'));
+        await userEvent.click(screen.getByText('send'));
 
         expect(screen.getByText(/hello world/)).toBeInTheDocument();
         expect(screen.getByText(/HELLO WORLD/)).toBeInTheDocument();

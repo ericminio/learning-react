@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MemoryRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, Navigate } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { render, screen, waitFor } from '@testing-library/react';
 
@@ -7,14 +7,13 @@ describe('Redirect', () => {
     it('is available', () => {
         render(
             <MemoryRouter initialEntries={['/initial']}>
-                <Switch>
-                    <Route path="/initial">
-                        <Redirect to="/final" />
-                    </Route>
-                    <Route path="/final">
-                        <div>landed</div>
-                    </Route>
-                </Switch>
+                <Routes>
+                    <Route
+                        path="/initial"
+                        element={<Navigate to="/final" />}
+                    ></Route>
+                    <Route path="/final" element={<div>landed</div>}></Route>
+                </Routes>
             </MemoryRouter>
         );
 
@@ -31,7 +30,7 @@ describe('Redirect', () => {
             });
             return (
                 <>
-                    {shouldRedirect && <Redirect to="/final" />}
+                    {shouldRedirect && <Navigate to="/final" />}
                     <div>initial</div>
                 </>
             );
@@ -41,14 +40,10 @@ describe('Redirect', () => {
         };
         render(
             <MemoryRouter initialEntries={['/initial']}>
-                <Switch>
-                    <Route path="/initial">
-                        <Initial />
-                    </Route>
-                    <Route path="/final">
-                        <Final />
-                    </Route>
-                </Switch>
+                <Routes>
+                    <Route path="/initial" element={<Initial />}></Route>
+                    <Route path="/final" element={<Final />}></Route>
+                </Routes>
             </MemoryRouter>
         );
         expect(screen.getByText(/initial/)).toBeInTheDocument();

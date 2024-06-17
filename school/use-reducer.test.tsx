@@ -4,7 +4,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 describe('useReducer', () => {
-    it('can help to update object', () => {
+    it('can help to update object', async () => {
         function Hello() {
             const initial = { message: 'hello world' };
             const reducer = (state) => {
@@ -27,7 +27,7 @@ describe('useReducer', () => {
         }
         render(<Hello />);
         expect(screen.getByText(/hello world/)).toBeInTheDocument();
-        userEvent.click(screen.getByText('change'));
+        await userEvent.click(screen.getByText('change'));
 
         expect(screen.getByText(/hi world/)).toBeInTheDocument();
     });

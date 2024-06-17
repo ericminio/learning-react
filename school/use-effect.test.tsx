@@ -18,7 +18,7 @@ describe('useEffect', () => {
         expect(screen.getByRole('greetings')).toHaveTextContent('hello');
     });
 
-    it('can detect value change', () => {
+    it('can detect value change', async () => {
         let Hello = () => {
             const [greetings, setGreetings] = useState<string>('hello');
             const [message, setMessage] = useState<string>();
@@ -43,15 +43,15 @@ describe('useEffect', () => {
         render(<Hello />);
         expect(screen.getByText(/hello world/)).toBeInTheDocument();
 
-        userEvent.click(screen.getByText('change'));
+        await userEvent.click(screen.getByText('change'));
         expect(screen.getByText(/hi world/)).toBeInTheDocument();
     });
 
-    it('can use external function', () => {
+    it('can use external function', async () => {
         let returningWhat = () => 'world';
         let Hello = ({ getData }) => {
-            const [greetings, setGreetings] = useState<string>('hello');
-            const [message, setMessage] = useState<string>();
+            const [greetings, setGreetings] = useState('hello');
+            const [message, setMessage] = useState();
 
             useEffect(() => {
                 setMessage(`${greetings} ${getData()}`);
@@ -73,7 +73,7 @@ describe('useEffect', () => {
         render(<Hello getData={returningWhat} />);
         expect(screen.getByText(/hello world/)).toBeInTheDocument();
 
-        userEvent.click(screen.getByText('change'));
+        await userEvent.click(screen.getByText('change'));
         expect(screen.getByText(/hi world/)).toBeInTheDocument();
     });
 
@@ -81,7 +81,7 @@ describe('useEffect', () => {
         let returningWhat = () => Promise.resolve('hello world');
 
         let Hello = ({ getData }) => {
-            const [message, setMessage] = useState<string>();
+            const [message, setMessage] = useState();
 
             useEffect(() => {
                 getData()
@@ -135,7 +135,7 @@ describe('useEffect', () => {
 
     it('postpones rendering yield', () => {
         let Hello = () => {
-            const [greetings, setGreetings] = useState<string>('hi');
+            const [greetings, setGreetings] = useState('hi');
             useEffect(() => {
                 setGreetings('hello');
             }, []);

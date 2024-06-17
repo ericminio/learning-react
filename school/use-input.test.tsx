@@ -4,7 +4,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 describe('User Input', () => {
-    it('can handle textarea', () => {
+    it('can handle textarea', async () => {
         let Hello = () => {
             const [message, setMessage] = useState('hello');
 
@@ -24,7 +24,7 @@ describe('User Input', () => {
         };
         render(<Hello />);
 
-        userEvent.type(screen.getByTestId('that-input'), 'hi');
+        await userEvent.type(screen.getByTestId('that-input'), 'hi');
 
         expect(screen.getByText(/modified: hi/)).toBeInTheDocument();
     });

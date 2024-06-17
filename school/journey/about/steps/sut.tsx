@@ -1,5 +1,5 @@
 import React from 'react';
-import { MemoryRouter, Switch, Route } from 'react-router-dom';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
 import { render } from '@testing-library/react';
 
@@ -8,14 +8,10 @@ import { Two } from '../../app/two';
 
 function Sut() {
     return (
-        <Switch>
-            <Route path="/one">
-                <One then="/two" />
-            </Route>
-            <Route path="/two">
-                <Two />
-            </Route>
-        </Switch>
+        <Routes>
+            <Route path="/one" element={<One then="/two" />}></Route>
+            <Route path="/two" element={<Two />}></Route>
+        </Routes>
     );
 }
 

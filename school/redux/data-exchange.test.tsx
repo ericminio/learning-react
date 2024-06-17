@@ -6,7 +6,7 @@ import { Provider, useDispatch, useSelector } from 'react-redux';
 import { createStore, combineReducers } from 'redux';
 
 describe('Redux', () => {
-    it('can be used to exchange data between components', () => {
+    it('can be used to exchange data between components', async () => {
         const initialState = { greetings: '' };
         function greetingsReducer(state = initialState, action) {
             if (action.type == 'greetings') {
@@ -32,16 +32,21 @@ describe('Redux', () => {
             return <div>${message.toUpperCase()}</div>;
         }
         render(
-            <Provider store={store}>
-                <Source /> <CapitalizeTarget />
-            </Provider>
+            <Provider
+                store={store}
+                children={
+                    <>
+                        <Source /> <CapitalizeTarget />
+                    </>
+                }
+            ></Provider>
         );
-        userEvent.click(screen.getByText('send'));
+        await userEvent.click(screen.getByText('send'));
 
         expect(screen.getByText(/HELLO WORLD/)).toBeInTheDocument();
     });
 
-    it('supports reducers composition', () => {
+    it('supports reducers composition', async () => {
         const initialStateA = { value: 'initial-a' };
         function reducerA(state = initialStateA, action) {
             if (action.type == 'update/a') {
@@ -88,11 +93,16 @@ describe('Redux', () => {
             );
         }
         render(
-            <Provider store={store}>
-                <Source /> <Target />
-            </Provider>
+            <Provider
+                store={store}
+                children={
+                    <>
+                        <Source /> <Target />
+                    </>
+                }
+            ></Provider>
         );
-        userEvent.click(screen.getByText('send'));
+        await userEvent.click(screen.getByText('send'));
 
         expect(screen.getByText(/initial-a/)).toBeInTheDocument();
         expect(screen.getByText(/modified-b/)).toBeInTheDocument();
