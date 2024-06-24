@@ -5,7 +5,9 @@ export const app = express();
 
 app.get('/', function (_, response) {
     response.setHeader('Content-Type', 'text/html');
-    const html = fs.readFileSync('school/jsdom/client/index.html').toString();
+    const html = fs
+        .readFileSync('school/jsdom/app/client/index.html')
+        .toString();
 
     response.write(html);
     response.end();

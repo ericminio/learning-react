@@ -5,7 +5,7 @@
 import http from 'http';
 import { openPage, eventually } from './support/index.js';
 
-import { app } from '../server/app.js';
+import { app } from '../app/server/app.js';
 
 describe('home page', () => {
     let port = 5001;
