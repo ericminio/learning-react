@@ -35430,6 +35430,6 @@ var _App = require("./App");
 var _jsxRuntime = require("react/jsx-runtime");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 const container = document.getElementById('root');
-const root = _client.default.createRoot(container).render( /*#__PURE__*/(0, _jsxRuntime.jsx)(_App.App, {}));
+_client.default.createRoot(container).render( /*#__PURE__*/(0, _jsxRuntime.jsx)(_App.App, {}));
 
 },{"./App":16,"react-dom/client":4,"react/jsx-runtime":11}]},{},[17]);
