@@ -9,7 +9,7 @@
         "test": "jest",
         "prettier:check": "npx prettier --check .",
         "prettier:write": "npx prettier --write .",
-        "build": "browserify -t [ babelify ] school/jsdom/app/client/index.js -o school/jsdom/build/bundle.js --extension=.jsx"
+        "build": "browserify -t [ babelify ] school/jsdom/app/client/index.js -o school/jsdom/build/app.js --extension=.jsx"
     },
     "author": "",
     "license": "ISC",
