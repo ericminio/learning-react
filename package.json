@@ -9,8 +9,8 @@
         "test": "jest",
         "prettier:check": "npx prettier --check .",
         "prettier:write": "npx prettier --write .",
-        "build:react": "browserify -r react -r react-dom/client -o school/jsdom/build/react.js",
-        "build": "browserify -t [ babelify ] -x react -x react-dom/client school/jsdom/app/client/index.js -o school/jsdom/build/webapp.js --extension=.jsx"
+        "build:react": "browserify -r react -r react-dom/client -r react/jsx-runtime -o school/jsdom/build/react.js",
+        "build": "browserify -t [ babelify ] -x react -x react-dom/client -x react/jsx-runtime school/jsdom/app/client/index.js -o school/jsdom/build/webapp.js --extension=.jsx"
     },
     "author": "",
     "license": "ISC",
