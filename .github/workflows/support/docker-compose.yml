@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+    dev:
+        build: .
+        image: ubuntu:react
+        container_name: ubuntu-react
+        ports:
+            - 3000:3000
+        volumes:
+            - ../../../.nvmrc:/root/code/.nvmrc
+            - ./run.sh:/root/code/run.sh
+            - ../../../package.json:/root/code/package.json
+            - ../../../package-lock.json:/root/code/package-lock.json
+            - ../../../babel.config.cjs:/root/code/babel.config.cjs
+            - ../../../jest.config.cjs:/root/code/jest.config.cjs
+            - ../../../jest.setup.js:/root/code/jest.setup.js
+            - ../../../school:/root/code/school
