@@ -13,9 +13,9 @@ app.get('/', function (_, response) {
     response.end();
 });
 
-app.get('/app.js', function (_, response) {
+app.get('/webapp.js', function (_, response) {
     response.setHeader('Content-Type', 'text/javascript');
-    const code = fs.readFileSync('school/jsdom/build/app.js').toString();
+    const code = fs.readFileSync('school/jsdom/build/webapp.js').toString();
 
     response.write(code);
     response.end();
