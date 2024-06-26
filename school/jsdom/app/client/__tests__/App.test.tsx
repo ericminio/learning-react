@@ -6,8 +6,9 @@ import { App } from '../App';
 
 describe('App', () => {
     beforeEach(() => {
-        fetch = async () =>
-            Promise.resolve({ json: () => Promise.resolve({ message: 'hi' }) });
+        global.fetch = jest.fn(async () => ({
+            json: () => Promise.resolve({ message: 'hi' }),
+        })) as jest.Mock;
     });
 
     it('presents fetched data', async () => {
