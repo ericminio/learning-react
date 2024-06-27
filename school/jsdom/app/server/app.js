@@ -22,7 +22,7 @@ app.get('/webapp.js', function (_, response) {
 });
 app.get('/react.js', function (_, response) {
     response.setHeader('Content-Type', 'text/javascript');
-    const code = fs.readFileSync('school/jsdom/build/react.js').toString();
+    const code = fs.readFileSync('school/jsdom/app/client/react.js').toString();
 
     response.write(code);
     response.end();
