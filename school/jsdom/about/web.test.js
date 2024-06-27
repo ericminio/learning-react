@@ -5,7 +5,8 @@
 import http from 'http';
 import { openPage, eventually } from './support/index.js';
 
-import { app } from '../app/server/app.js';
+import { app } from '../.instrumented/server/app.js';
+import fs from 'fs';
 
 describe('home page', () => {
     let port = 5001;
@@ -21,6 +22,14 @@ describe('home page', () => {
         page = await openPage(`http://localhost:${port}`);
     });
     afterEach(() => {
+        fs.writeFileSync(
+            `school/jsdom/.nyc_output/coverage-client-${Date.now()}.json`,
+            JSON.stringify(page.defaultView.__coverage__)
+        );
+        fs.writeFileSync(
+            `school/jsdom/.nyc_output/coverage-server-${Date.now()}.json`,
+            JSON.stringify(global.__coverage__)
+        );
         server.close();
     });
 

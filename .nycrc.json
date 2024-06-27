@@ -1,0 +1,18 @@
+{
+    "all": true,
+    "include": ["school/jsdom/app"],
+    "parser-plugins": [
+        "typescript",
+        "jsx",
+        "asyncGenerators",
+        "bigInt",
+        "classProperties",
+        "classPrivateProperties",
+        "dynamicImport",
+        "importMeta",
+        "objectRestSpread",
+        "optionalCatchBinding"
+    ],
+    "temp-dir": "school/jsdom/.nyc_output",
+    "report-dir": "school/jsdom/coverage"
+}

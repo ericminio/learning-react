@@ -5,12 +5,14 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "pretest": "npm run build",
+        "pretest": "npm run instrument && npm run build && rm -rf school/jsdom/.nyc_output && mkdir school/jsdom/.nyc_output",
         "test": "jest",
+        "posttest": "nyc report",
         "prettier:check": "npx prettier --check .",
         "prettier:write": "npx prettier --write .",
         "build:react": "browserify -r react -r react-dom/client -r react/jsx-runtime -o school/jsdom/build/react.js",
-        "build": "browserify -t [ babelify --extensions .ts,.tsx ] -x react -x react-dom/client -x react/jsx-runtime school/jsdom/app/client/index.tsx -o school/jsdom/build/webapp.js --extension=.tsx"
+        "instrument": "rm -rf school/jsdom/.instrumented && nyc instrument school/jsdom/app school/jsdom/.instrumented",
+        "build": "browserify -t [ babelify --extensions .ts,.tsx ] -x react -x react-dom/client -x react/jsx-runtime school/jsdom/.instrumented/client/index.tsx -o school/jsdom/build/webapp.js --extension=.tsx"
     },
     "author": "",
     "license": "ISC",
@@ -40,6 +42,7 @@
     },
     "dependencies": {
         "express": "^4.19.2",
+        "nyc": "^17.0.0",
         "react": "^18.3.1",
         "react-dom": "^18.3.1",
         "react-redux": "^9.1.2",
