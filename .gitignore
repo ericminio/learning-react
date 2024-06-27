@@ -2,3 +2,4 @@ node_modules
 coverage
 .instrumented
 .nyc_output
+build
