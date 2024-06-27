@@ -12,7 +12,7 @@
         "prettier:write": "npx prettier --write .",
         "build:react": "browserify -r react -r react-dom/client -r react/jsx-runtime -o school/jsdom/app/client/react.js",
         "instrument": "rm -rf school/jsdom/.instrumented && nyc instrument school/jsdom/app school/jsdom/.instrumented",
-        "build": "browserify -t [ babelify --extensions .ts,.tsx ] -x react -x react-dom/client -x react/jsx-runtime school/jsdom/.instrumented/client/index.tsx -o school/jsdom/build/webapp.js --extension=.tsx"
+        "build": "browserify -t [ babelify --extensions .ts,.tsx ] -x react -x react-dom/client -x react/jsx-runtime school/jsdom/.instrumented/client/index.tsx -o school/jsdom/.build/webapp.js --extension=.tsx"
     },
     "author": "",
     "license": "ISC",
