@@ -79,7 +79,7 @@ describe('Context', () => {
     it('can be the common store between components', async () => {
         const MessageContext = React.createContext({
             message: '',
-            setMessage: (_value) => {},
+            setMessage: (_value: string) => {},
         });
         const useMessageValue = () => {
             const [message, setMessage] = useState<string>('');
