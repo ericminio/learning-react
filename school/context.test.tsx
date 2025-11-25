@@ -77,20 +77,27 @@ describe('Context', () => {
         expect(screen.getByText(/world/)).toBeInTheDocument();
     });
     it('can be the common store between components', async () => {
-        const MessageContext = React.createContext({
-            message: '',
-            setMessage: (_value: string) => {},
-        });
-        const useMessageValue = () => {
-            const [message, setMessage] = useState<string>('');
-            const value = useMemo(() => ({ message, setMessage }), [message]);
-            return { value };
-        };
-        function App() {
-            const { value } = useMessageValue();
+        class Message {
+            greetings: string;
+            who: string;
+            constructor(greetings: string, who: string) {
+                this.greetings = greetings;
+                this.who = who;
+            }
+        }
 
+        const messageContextDefaultValue = new Message('', '');
+        const MessageContext = React.createContext({
+            message: messageContextDefaultValue,
+            setMessage: (_value: Message) => {},
+        });
+
+        function App() {
+            const [message, setMessage] = useState<Message>(
+                messageContextDefaultValue
+            );
             return (
-                <MessageContext.Provider value={value}>
+                <MessageContext.Provider value={{ message, setMessage }}>
                     <Source />
                     <Target />
                 </MessageContext.Provider>
@@ -99,15 +106,21 @@ describe('Context', () => {
 
         function Source() {
             const { setMessage } = useContext(MessageContext);
+
             useEffect(() => {
-                setMessage('world');
+                setMessage({ greetings: 'hello', who: 'world' });
             }, []);
+
             return <div>will update</div>;
         }
         function Target() {
             const { message } = useContext(MessageContext);
 
-            return <div>hello {message}</div>;
+            return (
+                <div>
+                    {message.greetings} {message.who}
+                </div>
+            );
         }
 
         render(<App />);
